@@ -1,0 +1,24 @@
+version: '3'
+services:
+  app:
+    build: .
+    container_name: colabora-backend
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongodb
+    networks:
+      - mongodb
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+volumes:
+  mongodb_data:
+
+networks:
+  mongodb:
+    driver: bridge
