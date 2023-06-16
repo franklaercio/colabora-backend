@@ -7,14 +7,19 @@ import { Category, CategoryDocument } from 'src/schemas/category.schema';
 export class CategoryService {
   constructor(
     @InjectModel(Category.name)
-    private CategoryModel: Model<CategoryDocument>,
+    private categoryModel: Model<CategoryDocument>,
   ) {}
 
   async createCategory(name: string, description: string): Promise<Category> {
-    const Category = new this.CategoryModel({
+    const Category = new this.categoryModel({
       name,
       description,
     });
     return Category.save();
+  }
+
+  async getAllCategories(): Promise<string[]> {
+    const categories = await this.categoryModel.distinct('categoria').exec();
+    return categories;
   }
 }
