@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CategoryController } from 'src/controllers/category/category.controller';
 import { Category, CategorySchema } from 'src/schemas/category.schema';
@@ -11,6 +11,6 @@ import { CategoryService } from 'src/services/category/category.service';
     ]),
   ],
   controllers: [CategoryController],
-  providers: [CategoryService],
+  providers: [CategoryService, ValidationPipe],
 })
 export class CategoryModule {}
