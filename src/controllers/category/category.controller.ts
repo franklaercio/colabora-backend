@@ -1,25 +1,16 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { CategoryService } from '../../services/category/category.service';
-import { CreateCategoryDto } from './create-category.dto';
 
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  @UsePipes(new ValidationPipe())
-  async createCategory(@Body() categoryDto: CreateCategoryDto) {
-    const category = await this.categoryService.createCategory(
-      categoryDto.name,
-      categoryDto.description,
-    );
+  async createProposta(
+    @Body('name') name: string,
+    @Body('description') descricao: string,
+  ) {
+    const category = await this.categoryService.createCategory(name, descricao);
     return {
       message: 'Category created successfully',
       category,
