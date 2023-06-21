@@ -29,7 +29,7 @@ export class CategoryController {
     };
   }
 
-  @Get('categories')
+  @Get()
   @ApiOkResponse({ type: CategoryEntity })
   async getAllCategories() {
     const categories = await this.categoryService.getAllCategories();
