@@ -1,4 +1,10 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CreateSuggestionDto } from './dtos/create-suggestion-dto';
 import { SuggestionService } from './suggestion.service';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
@@ -10,6 +16,7 @@ export class SuggestionController {
   constructor(private readonly suggestionService: SuggestionService) {}
 
   @Post()
+  @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: SuggestionEntity })
   async createSuggestion(@Body() createSuggestionDto: CreateSuggestionDto) {
     const suggestion = await this.suggestionService.createSuggestion(

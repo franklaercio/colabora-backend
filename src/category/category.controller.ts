@@ -1,7 +1,15 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  ValidationPipe,
+  UsePipes,
+} from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { CategoryEntity } from './entities/category-entity';
+import { CreateCategoryDto } from './dtos/create-category-dto';
 
 @Controller('category')
 @ApiTags('category')
@@ -9,12 +17,12 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
+  @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: CategoryEntity })
-  async createProposta(
-    @Body('name') name: string,
-    @Body('description') descricao: string,
-  ) {
-    const category = await this.categoryService.createCategory(name, descricao);
+  async createProposta(@Body() createCategoryDto: CreateCategoryDto) {
+    const category = await this.categoryService.createCategory(
+      createCategoryDto,
+    );
     return {
       message: 'Category created successfully',
       category,

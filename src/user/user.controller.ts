@@ -1,4 +1,10 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user-dto';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
@@ -10,6 +16,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: UserEntity })
   async createUser(@Body() createUserDto: CreateUserDto) {
     const user = await this.userService.createUser(createUserDto);
