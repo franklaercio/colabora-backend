@@ -6,6 +6,7 @@ import {
   ValidationPipe,
   Get,
   Param,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user-dto';
@@ -37,21 +38,45 @@ export class UserController {
   @ApiCreatedResponse({ type: UserEntity })
   async getById(@Param() params: any) {
     const user = await this.userService.getById(params.id);
-    return { 
-      message: 'Usuário criado com sucesso', 
-      data: {
-        id: user.id,
-        name: user.name,
-        created_at: user.createdAt
-      }
-    };
+
+    if (user) {
+      return {
+        status: HttpStatus.OK,
+        message: 'User retrieve with success', 
+        data: {
+          id: user.id,
+          name: user.name,
+          created_at: user.createdAt
+        }
+      };
+    } else {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'User not found',
+      };
+    }
   }
 
-  @Get('/login')
+  @Post('/login')
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: UserEntity })
-  async login(@Param() params: any) {
-    const user = await this.userService.findByEmailAndPassword(params.email, params.password);
-    return { message: 'Login realizado com sucesso'};
+  async login(@Body('email') email: string, @Body('password') password: string) {
+    const user = await this.userService.login(email, password);
+
+    if (user) {
+      return {
+        status: HttpStatus.OK,
+        message: 'Login successful',
+        data: {
+          id: user.id,
+          name: user.name,
+        },
+      };
+    } else {
+      return {
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'Invalid credentials',
+      };
+    }
   }
 }

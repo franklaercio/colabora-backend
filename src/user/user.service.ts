@@ -13,11 +13,13 @@ export class UserService {
     return await createdUser.save();
   }
 
-  async getById(id: string): Promise<User> {
-    return await this.userModel.findById({ id: id });
+  async getById(id: string): Promise<User | null> {
+    const user = await this.userModel.findById({ id: id }).exec();
+    return user;
   }
 
-  async findByEmailAndPassword(email: string, password: string): Promise<User> {
-    return await this.userModel.findByEmailAndPassword({ email, password });
+  async login(email: string, password: string): Promise<User | null> {
+    const user = await this.userModel.findOne({ email, password }).exec();
+    return user;
   }
 }
