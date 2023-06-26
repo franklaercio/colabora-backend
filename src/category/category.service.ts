@@ -22,7 +22,8 @@ export class CategoryService {
     return categories;
   }
 
-  async getCategoryById(id: string): Promise<Category> {
-    return await this.categoryModel.findById({ where: { id } });
+  async getById(id: string): Promise<Category | null> {
+    const category = await this.categoryModel.findById({ _id: id }).exec();
+    return category;
   }
 }

@@ -5,6 +5,8 @@ import {
   Get,
   ValidationPipe,
   UsePipes,
+  HttpStatus,
+  Param,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
@@ -36,5 +38,29 @@ export class CategoryController {
     return {
       categories,
     };
+  }
+
+  @Get(':id')
+  @UsePipes(new ValidationPipe())
+  @ApiCreatedResponse({ type: CategoryEntity })
+  async getById(@Param() params: any) {
+    const category = await this.categoryService.getById(params.id);
+
+    if (category) {
+      return {
+        status: HttpStatus.OK,
+        message: 'Category retrieve with success', 
+        data: {
+          id: category.id,
+          name: category.name,
+          description: category.description
+        }
+      };
+    } else {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Category not found',
+      };
+    }
   }
 }
