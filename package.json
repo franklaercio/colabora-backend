@@ -19,7 +19,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "prisma": {
-    "schema": "prisma/schema.prisma"
+    "postinstall": "prisma generate",
+    "build": "prisma generate && npm build"
   },
   "dependencies": {
     "@nestjs/common": "^9.4.3",
