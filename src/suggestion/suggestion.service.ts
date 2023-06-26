@@ -1,15 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateSuggestionDto } from './dtos/create-suggestion-dto';
-import { Suggestion } from '@prisma/client';
+import { InjectModel } from '@nestjs/mongoose';
+import { Suggestion } from './schemas/suggestion.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class SuggestionService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @InjectModel(Suggestion.name) private suggestionModel: Model<Suggestion>,
+  ) {}
 
   async createSuggestion(
     createSuggestionDto: CreateSuggestionDto,
   ): Promise<Suggestion> {
-    return await this.prisma.suggestion.create({ data: createSuggestionDto });
+    const suggestionCreated = new this.suggestionModel(createSuggestionDto);
+    return await suggestionCreated.save();
   }
 }

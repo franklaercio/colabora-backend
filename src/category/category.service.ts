@@ -1,24 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { Category } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCategoryDto } from './dtos/create-category-dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Category } from './schemas/category.schema';
 
 @Injectable()
 export class CategoryService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @InjectModel(Category.name) private categoryModel: Model<Category>,
+  ) {}
 
   async createCategory(
     createCategoryDto: CreateCategoryDto,
   ): Promise<Category> {
-    return await this.prisma.category.create({ data: createCategoryDto });
+    const categoryCreated = new this.categoryModel(createCategoryDto);
+    return await categoryCreated.save();
   }
 
   async getAllCategories(): Promise<Category[]> {
-    const categories = await this.prisma.category.findMany();
+    const categories = await this.categoryModel.find().exec();
     return categories;
   }
 
   async getCategoryById(id: string): Promise<Category> {
-    return await this.prisma.category.findFirst({ where: { id } });
+    return await this.categoryModel.findById({ where: { id } });
   }
 }

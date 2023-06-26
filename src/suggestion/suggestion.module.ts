@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
-import { PrismaModule } from 'src/prisma/prisma.module';
 import { SuggestionService } from 'src/suggestion/suggestion.service';
 import { SuggestionController } from './suggestion.controller';
+import { Suggestion, SuggestionSchema } from './schemas/suggestion.schema';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Suggestion.name, schema: SuggestionSchema },
+    ]),
+  ],
   controllers: [SuggestionController],
   providers: [SuggestionService],
 })

@@ -1,5 +1,7 @@
-import { Suggestion } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
+import { Suggestion } from '../schemas/suggestion.schema';
+import { Category } from 'src/category/schemas/category.schema';
+import { User } from 'src/user/schemas/user.schema';
 
 export class SuggestionEntity implements Suggestion {
   @ApiProperty()
@@ -15,8 +17,14 @@ export class SuggestionEntity implements Suggestion {
   published: boolean;
 
   @ApiProperty()
-  authorId: string;
+  createdAt: Date;
 
   @ApiProperty()
-  categoryId: string;
+  updatedAt: Date;
+
+  @ApiProperty()
+  authorId: User;
+
+  @ApiProperty()
+  categoryId: Category;
 }
