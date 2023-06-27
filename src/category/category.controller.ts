@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
-import { CategoryEntity } from './entities/category-entity';
-import { CreateCategoryDto } from './dtos/create-category-dto';
+import { CategoryEntity } from './entities/category.entity';
+import { CreateCategoryDto } from './dtos/create.category.dto';
 
 @Controller('category')
 @ApiTags('category')
@@ -49,12 +49,12 @@ export class CategoryController {
     if (category) {
       return {
         status: HttpStatus.OK,
-        message: 'Category retrieve with success', 
+        message: 'Category retrieve with success',
         data: {
           id: category.id,
           name: category.name,
-          description: category.description
-        }
+          description: category.description,
+        },
       };
     } else {
       return {

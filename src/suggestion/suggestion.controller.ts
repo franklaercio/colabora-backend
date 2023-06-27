@@ -4,11 +4,12 @@ import {
   Body,
   UsePipes,
   ValidationPipe,
+  Get,
 } from '@nestjs/common';
-import { CreateSuggestionDto } from './dtos/create-suggestion-dto';
+import { CreateSuggestionDto } from './dtos/create.suggestion.dto';
 import { SuggestionService } from './suggestion.service';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { SuggestionEntity } from './entities/suggestion-entity';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { SuggestionEntity } from './entities/suggestion.entity';
 
 @Controller('suggestion')
 @ApiTags('suggestion')
@@ -25,6 +26,15 @@ export class SuggestionController {
     return {
       message: 'Suggestion created successfully',
       suggestion,
+    };
+  }
+
+  @Get()
+  @ApiOkResponse({ type: SuggestionEntity })
+  async getAll() {
+    const suggestions = await this.suggestionService.getAll();
+    return {
+      suggestions,
     };
   }
 }

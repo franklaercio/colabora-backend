@@ -9,9 +9,9 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dtos/create-user-dto';
+import { CreateUserDto } from './dtos/create.user.dto';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { UserEntity } from './entities/user-entity';
+import { UserEntity } from './entities/user.entity';
 
 @Controller('user')
 @ApiTags('user')
@@ -23,13 +23,13 @@ export class UserController {
   @ApiCreatedResponse({ type: UserEntity })
   async createUser(@Body() createUserDto: CreateUserDto) {
     const user = await this.userService.createUser(createUserDto);
-    return { 
-      message: 'Usuário criado com sucesso', 
+    return {
+      message: 'Usuário criado com sucesso',
       data: {
         id: user.id,
         name: user.name,
-        created_at: user.createdAt
-      }
+        created_at: user.createdAt,
+      },
     };
   }
 
@@ -42,12 +42,12 @@ export class UserController {
     if (user) {
       return {
         status: HttpStatus.OK,
-        message: 'User retrieve with success', 
+        message: 'User retrieve with success',
         data: {
           id: user.id,
           name: user.name,
-          created_at: user.createdAt
-        }
+          created_at: user.createdAt,
+        },
       };
     } else {
       return {
@@ -60,7 +60,10 @@ export class UserController {
   @Post('/login')
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: UserEntity })
-  async login(@Body('email') email: string, @Body('password') password: string) {
+  async login(
+    @Body('email') email: string,
+    @Body('password') password: string,
+  ) {
     const user = await this.userService.login(email, password);
 
     if (user) {
