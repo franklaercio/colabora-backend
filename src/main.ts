@@ -15,18 +15,18 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/api', app, document, {
-    customCssUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css',
-  });
+  SwaggerModule.setup('/api', app, document);
 
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
-    origin: true, // attempted "origin":["http://localhost"]
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: [
+      'http://localhost',
+      'https://colabora-backend-franklaercio.vercel.app/',
+    ],
+    methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE'],
     preflightContinue: false,
-    credentials: true,
-    allowedHeaders: 'Content-Type, Accept,Authorization',
+    credentials: false,
+    allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
   });
 
   await app.listen(3000);
