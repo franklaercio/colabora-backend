@@ -7,6 +7,7 @@ import {
   UsePipes,
   HttpStatus,
   Param,
+  Query,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
@@ -33,11 +34,20 @@ export class CategoryController {
 
   @Get()
   @ApiOkResponse({ type: CategoryEntity })
-  async getAllCategories() {
-    const categories = await this.categoryService.getAllCategories();
-    return {
-      categories,
-    };
+  async getAllCategories(@Query() query: { name?: string }) {
+    const categories = await this.categoryService.getAllCategories(query.name);
+    if (categories.length > 0) {
+      return {
+        status: HttpStatus.OK,
+        message: 'Category retrieve with success',
+        data: categories,
+      };
+    } else {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Category not found',
+      };
+    }
   }
 
   @Get(':id')

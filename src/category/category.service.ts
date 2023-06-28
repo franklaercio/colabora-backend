@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateCategoryDto } from './dtos/create.category.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -17,9 +17,14 @@ export class CategoryService {
     return await categoryCreated.save();
   }
 
-  async getAllCategories(): Promise<Category[]> {
-    const categories = await this.categoryModel.find().exec();
-    return categories;
+  async getAllCategories(name: string): Promise<Category[]> {
+    if (name) {
+      const categories = await this.categoryModel.find({ name }).exec();
+      return categories;
+    } else {
+      const categories = await this.categoryModel.find().exec();
+      return categories;
+    }
   }
 
   async getById(id: string): Promise<Category | null> {
