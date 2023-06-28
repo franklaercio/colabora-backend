@@ -25,6 +25,8 @@ async function bootstrap() {
       'https://colabora-frontend-franklaercio.vercel.app/',
     ],
     methods: ['GET', 'POST'],
+    allowedHeaders: '*',
+    credentials: true,
   });
 
   await app.listen(3000);
