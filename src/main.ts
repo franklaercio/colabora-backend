@@ -6,7 +6,7 @@ import { writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
     .setTitle('Colabora')
@@ -24,7 +24,7 @@ async function bootstrap() {
       'http://localhost:3000',
       'https://colabora-frontend-franklaercio.vercel.app/',
     ],
-    methods: ['GET', 'POST'],
+    methods: '*',
     allowedHeaders: '*',
     credentials: true,
   });
