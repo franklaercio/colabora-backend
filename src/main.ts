@@ -19,6 +19,14 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
+  app.enableCors({
+    origin: [
+      'http://localhost:3000',
+      'https://colabora-frontend-franklaercio.vercel.app/',
+    ],
+    methods: ['GET', 'POST'],
+  });
+
   await app.listen(3000);
 
   if (process.env.NODE_ENV === 'dev') {
