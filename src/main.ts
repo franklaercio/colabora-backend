@@ -2,8 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import { writeFileSync } from 'fs';
-import { resolve } from 'path';
+import { cors } from 'cors';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,32 +15,20 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/api', app, document);
+  SwaggerModule.setup('/api', app, document, {
+    customCssUrl:
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css',
+  });
 
   app.useGlobalPipes(new ValidationPipe());
 
-  app.enableCors({
-    allowedHeaders: ['content-type'],
-    origin: [
-      'http://localhost:3000',
-      'https://colabora-frontend-franklaercio.vercel.app/',
-    ],
-    credentials: true,
-  });
+  const corsOptions: CorsOptions = {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  };
+
+  app.use(cors(corsOptions));
 
   await app.listen(3000);
-
-  if (process.env.NODE_ENV === 'dev') {
-    const pathToSwaggerStaticFolder = resolve(process.cwd(), 'swagger-static');
-
-    const pathToSwaggerJson = resolve(
-      pathToSwaggerStaticFolder,
-      'swagger.json',
-    );
-
-    const swaggerJson = JSON.stringify(document, null, 2);
-    writeFileSync(pathToSwaggerJson, swaggerJson);
-    console.log(`Swagger JSON file written to: '/swagger-static/swagger.json'`);
-  }
 }
 bootstrap();
