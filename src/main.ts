@@ -20,12 +20,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.enableCors({
+    allowedHeaders: ['content-type'],
     origin: [
       'http://localhost:3000',
       'https://colabora-frontend-franklaercio.vercel.app/',
     ],
-    methods: '*',
-    allowedHeaders: '*',
     credentials: true,
   });
 
