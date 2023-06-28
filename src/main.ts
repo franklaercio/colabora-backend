@@ -19,7 +19,14 @@ async function bootstrap() {
   });
 
   app.useGlobalPipes(new ValidationPipe());
-  app.enableCors();
+  app.enableCors({
+    allowedHeaders: ['Content-Type'],
+    origin: [
+      'http://localhost:3000',
+      'https://colabora-backend-franklaercio.vercel.app/',
+    ],
+    credentials: true,
+  });
 
   await app.listen(3000);
 }
